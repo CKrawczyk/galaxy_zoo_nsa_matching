@@ -90,7 +90,15 @@ def json_or_nan(s):
         return {}
 
 
+def id_to_number(s):
+    if not pandas.isnull(s):
+        return int(s.split('_')[1])
+    else:
+        return pandas.np.nan
+
+
 metadata = join_table.metadata.apply(json_or_nan)
 metadata_table = pandas.DataFrame(nested_to_record(metadata))
+metadata_table['nsa_id'] = metadata_table['nsa_id'].apply(id_to_number)
 del join_table['metadata']
 pandas.concat([join_table, metadata_table], axis=1).to_csv('gz4_aggregate_with_metadata.csv', index=False)

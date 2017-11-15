@@ -6,10 +6,10 @@ import numpy as np
 import progressbar
 
 gz4 = pandas.read_csv('dr8_ra_dec.csv')
-nsa_fits = fits.open('/Users/coleman/Desktop/nsa_v1_0_0.fits')
+nsa_fits = fits.open('/Volumes/Work/nsa_v1_0_0.fits')
 nsa_table = nsa_fits[1].data
 
-gz4_c = SkyCoord(ra=pandas.np.array(gz4.ra) * u.degree, dec=pandas.np.array(gz4.dec) * u.degree)
+gz4_c = SkyCoord(ra=np.array(gz4.ra) * u.degree, dec=np.array(gz4.dec) * u.degree)
 nsa_c = SkyCoord(ra=nsa_table['RA'] * u.degree, dec=nsa_table['DEC'] * u.degree)
 idx, d2d, d3d = gz4_c.match_to_catalog_sky(nsa_c)
 

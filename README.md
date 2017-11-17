@@ -15,9 +15,19 @@ The `objid`s are used to look up the positions using an SQL query via `astroquer
 It outputs one `csv` file that has `objid`, `RA`, and `DEC` for this subsample of GZ4
 galaxies.
 
+NOTE: this query does not work well, it only gives 123,186 matches out of
+235,443 galaxies.  I ended up doing a table join on casjobs to do this.
+
+The SQL query used was:
+```sql
+SELECT p.ra, p.dec, p.objid into mydb.dr14_gz4_join from PhotoObjAll AS p
+  INNER JOIN MyDB.GZ4_DR8 g ON g.sdss_id=p.objid
+```
+after uploading the `gz4_aggregate_with_metadata.csv` data table to casjobs.
+
 ## gz4_to_nsa.py
 This script takes the `RA` and `DEC` matches of the the previous script and does a
-6 arcsec match to the NSA catalog.  The resulting `nsa_id` values are added to the
+10 arcsec match to the NSA catalog.  The resulting `nsa_id` values are added to the
 `csv` file output by `aggregate_gz4.py`.  Finally the data table is reduced to only
 include data with `nsa_id`s.  Update line 9 to point to where the `nsa_v1_0_0.fits`
 file is located.
@@ -26,7 +36,7 @@ It outputs two `csv` files, one with `objid`, `RA`, `DEC`, and `nsa_id`, and one
 "nsa only" GZ4 vote counts with metadata.
 
 ## gz2_to_nsa.py
-This script takes the three GZ2 catalogs (specz, photoz, s82 normal) and does a 6 arcsec
+This script takes the three GZ2 catalogs (specz, photoz, s82 normal) and does a 10 arcsec
 match to the NSA catalog.
 
 It outputs three `csv` files (one for each catalog) that only includes the matched
@@ -41,3 +51,7 @@ This final script brings the three GZ2 matched tables into the same format as th
 
 This outputs one `csv` file with the "all NSA galaxies seen by galaxy zoo ever" raw vote
 count catalog.
+
+## manga_subsample.py
+This grabs the manga subsample from the NSA matched `csv`.  It will also create
+a table with the `nsa_id` of all missing MaNGA galaxies.

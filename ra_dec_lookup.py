@@ -3,7 +3,7 @@ from astropy.table import vstack
 import progressbar
 import pandas
 
-cmd = 'SELECT DISTINCT p.ra, p.dec, p.objid FROM PhotoObjAll AS p   WHERE p.objid in {0}'
+cmd = 'SELECT p.ra, p.dec, p.objid FROM PhotoObjAll AS p   WHERE p.objid in {0}'
 
 widgets = [
     'Fetching: ',

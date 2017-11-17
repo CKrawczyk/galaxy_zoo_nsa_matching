@@ -1,10 +1,13 @@
 import pandas
 import label_lut
+from astropy import units as u
 
-gz4 = pandas.read_csv('gz4_aggregate_with_metadata_nsa_only.csv')
-gz2_specz = pandas.read_csv('gz2_specz_nsa_only.csv')
-gz2_photoz = pandas.read_csv('gz2_photoz_nsa_only.csv')
-gz2_s82 = pandas.read_csv('gz2_s82_nsa_only.csv')
+matching_radius = 10 * u.arcsec
+
+gz4 = pandas.read_csv('gz4_aggregate_with_metadata_nsa_only_{0}_arcsec.csv'.format(matching_radius.value))
+gz2_specz = pandas.read_csv('gz2_specz_nsa_only_{0}_arcsec.csv'.format(matching_radius.value))
+gz2_photoz = pandas.read_csv('gz2_photoz_nsa_only_{0}_arcsec.csv'.format(matching_radius.value))
+gz2_s82 = pandas.read_csv('gz2_s82_nsa_only_{0}_arcsec.csv'.format(matching_radius.value))
 
 cols_to_match = ['nsa_id', 'survey'] + sorted(list(label_lut.gz4_to_gz2.keys()))
 label_lut.gz2_to_gz4['sample'] = 'survey'
@@ -32,4 +35,4 @@ for col in nsa_reduce.columns:
     if 'sloan-' in col:
         nsa_reduce[col] = nsa_reduce[col].astype(int)
 
-nsa_reduce.to_csv('nsa_all_raw_gz_counts.csv', index=False)
+nsa_reduce.to_csv('nsa_all_raw_gz_counts_{0}_arcsec.csv'.format(matching_radius.value), index=False)
